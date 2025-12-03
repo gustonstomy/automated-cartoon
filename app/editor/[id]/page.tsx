@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Film, ArrowLeft, Save, Play, Download } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Film, ArrowLeft, Save, Play, Download, Volume2 } from "lucide-react";
 import { AnimationProject, Scene, Character } from "@/types/animation";
 
 export default function EditorPage() {
@@ -222,17 +223,38 @@ export default function EditorPage() {
                   {currentScene.dialogue.map((d, idx) => (
                     <div
                       key={idx}
-                      className="bg-purple-50 p-3 rounded-lg text-sm"
+                      className="bg-purple-50 p-3 rounded-lg text-sm space-y-2"
                     >
-                      <span className="font-bold text-primary">
-                        {
-                          currentScene.characters.find(
-                            (c) => c.id === d.characterId
-                          )?.name
-                        }
-                        :
-                      </span>{" "}
-                      {d.text}
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-primary">
+                          {
+                            currentScene.characters.find(
+                              (c) => c.id === d.characterId
+                            )?.name
+                          }
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const u = new SpeechSynthesisUtterance(d.text);
+                            window.speechSynthesis.speak(u);
+                          }}
+                        >
+                          <Volume2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <Textarea
+                        value={d.text}
+                        onChange={(e) => {
+                          if (!project) return;
+                          const updatedScenes = [...project.scenes];
+                          updatedScenes[selectedScene].dialogue[idx].text =
+                            e.target.value;
+                          setProject({ ...project, scenes: updatedScenes });
+                        }}
+                        className="bg-white"
+                      />
                     </div>
                   ))}
                 </div>

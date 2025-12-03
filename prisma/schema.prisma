@@ -1,29 +1,25 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+    provider = "sqlite"
 }
 
 model Project {
-  id        String   @id @default(uuid())
-  name      String
-  storyData String   // JSON stringified
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  assets    Asset[]
+    id        String   @id @default(cuid())
+    name      String
+    storyData String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    assets    Asset[]
 }
 
 model Asset {
-  id        String   @id @default(uuid())
-  projectId String
-  type      String   // 'audio', 'image', 'video'
-  url       String
-  metadata  String?  // JSON stringified
-  createdAt DateTime @default(now())
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@index([projectId])
+    id        String   @id @default(cuid())
+    type      String
+    url       String
+    projectId String
+    project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
 }

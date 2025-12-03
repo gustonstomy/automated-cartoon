@@ -14,6 +14,32 @@ export default function PreviewPage() {
   const [loading, setLoading] = useState(true);
   const [currentFrame, setCurrentFrame] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportUrl, setExportUrl] = useState<string | null>(null);
+
+  const handleExport = async () => {
+    if (!project) return;
+    setExporting(true);
+    setExportUrl(null);
+    try {
+      const response = await fetch("/api/render", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId: project.id }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setExportUrl(data.url);
+      } else {
+        alert("Export failed: " + (data.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Export error:", error);
+      alert("Export failed");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   useEffect(() => {
     if (params.id) {
@@ -119,13 +145,33 @@ export default function PreviewPage() {
                 Edit
               </Button>
             </Link>
-            <Button variant="outline" disabled>
+            <Button
+              variant="outline"
+              onClick={handleExport}
+              disabled={exporting}
+            >
               <Download className="w-4 h-4" />
-              Export (Coming Soon)
+              {exporting ? "Exporting..." : "Export Video"}
             </Button>
           </div>
         </div>
       </nav>
+
+      {exportUrl && (
+        <div className="container mx-auto px-4 mt-4">
+          <div className="bg-green-50 border border-green-200 p-4 rounded-lg flex items-center justify-between">
+            <p className="text-green-800">Video exported successfully!</p>
+            <a
+              href={exportUrl}
+              download
+              className="flex items-center gap-2 text-green-700 font-medium hover:underline"
+            >
+              <Download className="w-4 h-4" />
+              Download MP4
+            </a>
+          </div>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <Card className="cartoon-shadow">

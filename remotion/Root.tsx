@@ -6,7 +6,7 @@ export const RemotionRoot: React.FC = () => {
     <>
       <Composition
         id="CartoonAnimation"
-        component={AnimationComposition}
+        component={AnimationComposition as any}
         durationInFrames={300}
         fps={30}
         width={1920}

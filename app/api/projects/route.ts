@@ -63,9 +63,9 @@ export async function POST(request: Request) {
     projectData.id = project.id;
 
     return NextResponse.json({
+      ...projectData,
       id: project.id,
       name: project.name,
-      ...projectData,
     });
   } catch (error) {
     console.error("Error creating project:", error);

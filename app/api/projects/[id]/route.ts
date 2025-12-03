@@ -23,11 +23,11 @@ export async function GET(
     projectData.id = project.id;
 
     return NextResponse.json({
+      ...projectData,
       id: project.id,
       name: project.name,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
-      ...projectData,
     });
   } catch (error) {
     console.error("Error fetching project:", error);
