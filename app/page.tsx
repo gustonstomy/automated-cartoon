@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,16 +18,14 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Film className="w-8 h-8 text-primary" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              CartoonMaker
-            </span>
+            <span className="text-2xl font-bold text-black">CartoonMaker</span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/projects">
               <Button variant="ghost">My Projects</Button>
             </Link>
             <Link href="/create">
-              <Button className="cartoon-button cartoon-shadow">
+              <Button className="cartoon-button cartoon-shadow bg-black text-white">
                 <Sparkles className="w-4 h-4" />
                 Create Story
               </Button>
@@ -38,7 +37,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-pulse-slow">
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-black">
             Create Amazing Cartoons
           </h1>
           <p className="text-xl md:text-2xl text-gray-700 mb-8 font-light">
@@ -49,7 +48,7 @@ export default function Home() {
             <Link href="/create">
               <Button
                 size="lg"
-                className="cartoon-button cartoon-shadow text-lg px-8 py-6"
+                className="cartoon-button cartoon-shadow text-lg px-8 py-6 bg-black text-white"
               >
                 <Wand2 className="w-5 h-5" />
                 Start Creating
@@ -59,7 +58,7 @@ export default function Home() {
               <Button
                 size="lg"
                 variant="outline"
-                className="cartoon-button text-lg px-8 py-6"
+                className="cartoon-button text-lg px-8 py-6 bg-black text-white"
               >
                 <Play className="w-5 h-5" />
                 View Examples
@@ -172,7 +171,7 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-20">
-        <div className="max-w-3xl mx-auto text-center bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-12 cartoon-shadow text-white">
+        <div className="max-w-3xl mx-auto text-center bg-black rounded-2xl p-12 cartoon-shadow text-white">
           <h2 className="text-4xl font-bold mb-4">
             Ready to Create Your First Animation?
           </h2>
@@ -183,7 +182,7 @@ export default function Home() {
             <Button
               size="lg"
               variant="secondary"
-              className="cartoon-button text-lg px-8 py-6"
+              className="cartoon-button text-lg px-8 py-6 bg-black text-white"
             >
               Get Started for Free
             </Button>

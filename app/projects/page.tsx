@@ -59,12 +59,12 @@ export default function ProjectsPage() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <Film className="w-8 h-8 text-primary" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold  text-black ">
               CartoonMaker
             </span>
           </Link>
           <Link href="/create">
-            <Button className="cartoon-button cartoon-shadow">
+            <Button className="cartoon-button cartoon-shadow bg-black text-white">
               <Plus className="w-4 h-4" />
               New Project
             </Button>
@@ -74,9 +74,7 @@ export default function ProjectsPage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            My Projects
-          </h1>
+          <h1 className="text-4xl font-bold mb-2 text-black">My Projects</h1>
           <p className="text-gray-600 text-lg">
             Manage and edit your animation projects
           </p>
@@ -105,7 +103,7 @@ export default function ProjectsPage() {
                 Create your first animation to get started!
               </p>
               <Link href="/create">
-                <Button className="cartoon-button cartoon-shadow">
+                <Button className="cartoon-button cartoon-shadow bg-black text-white">
                   <Plus className="w-4 h-4" />
                   Create Project
                 </Button>

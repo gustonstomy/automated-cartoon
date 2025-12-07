@@ -133,7 +133,7 @@ export default function EditorPage() {
             <Button
               onClick={saveProject}
               disabled={saving}
-              className="cartoon-button"
+              className="cartoon-button bg-black text-white"
             >
               <Save className="w-4 h-4" />
               {saving ? "Saving..." : "Save"}

@@ -75,9 +75,7 @@ export default function CreatePage() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <Film className="w-8 h-8 text-primary" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              CartoonMaker
-            </span>
+            <span className="text-2xl font-bold text-black">CartoonMaker</span>
           </Link>
           <Link href="/">
             <Button variant="ghost">
@@ -90,7 +88,7 @@ export default function CreatePage() {
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-2 text-black">
             Create Your Animation
           </h1>
           <p className="text-gray-600 text-lg">
@@ -144,7 +142,7 @@ export default function CreatePage() {
                   </Button>
                   <Button
                     onClick={handleGenerate}
-                    className="flex-1 cartoon-button cartoon-shadow"
+                    className="flex-1 cartoon-button cartoon-shadow bg-black text-white"
                     disabled={loading}
                   >
                     {loading ? (
@@ -176,7 +174,10 @@ export default function CreatePage() {
                   {characterTemplates.map((char) => (
                     <div
                       key={char.id}
-                      className="border rounded-lg p-4 hover:bg-accent transition-colors text-center"
+                      className="border-2 rounded-lg p-4 hover:border-primary hover:bg-accent transition-all cursor-pointer text-center"
+                      onClick={() => {
+                        // Visual feedback - template is clickable
+                      }}
                     >
                       <div
                         className="w-20 h-24 mx-auto mb-2"
@@ -205,7 +206,10 @@ export default function CreatePage() {
                   {sceneTemplates.slice(0, 4).map((scene) => (
                     <div
                       key={scene.id}
-                      className="border rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all cursor-pointer"
+                      className="border-2 rounded-lg overflow-hidden hover:border-primary hover:ring-2 hover:ring-primary transition-all cursor-pointer"
+                      onClick={() => {
+                        // Visual feedback - template is clickable
+                      }}
                     >
                       <div
                         className="w-full h-24"

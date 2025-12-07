@@ -283,7 +283,10 @@ export default function PreviewPage() {
             {/* Controls */}
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <Button onClick={togglePlayPause} className="cartoon-button">
+                <Button
+                  onClick={togglePlayPause}
+                  className="cartoon-button bg-black text-white"
+                >
                   {isPlaying ? "Pause" : "Play"}
                 </Button>
                 <Button
@@ -305,7 +308,7 @@ export default function PreviewPage() {
               {/* Progress Bar */}
               <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden cursor-pointer">
                 <div
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-600 to-pink-600 transition-all"
+                  className="absolute inset-y-0 left-0 bg-black transition-all"
                   style={{
                     width: `${
                       (currentFrame / (project.metadata.totalDuration * fps)) *
