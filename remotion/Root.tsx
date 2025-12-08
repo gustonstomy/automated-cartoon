@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Composition } from "remotion";
 import { AnimationComposition } from "./Composition";
 

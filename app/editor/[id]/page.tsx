@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,12 +14,12 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Film, ArrowLeft, Save, Play, Download, Volume2 } from "lucide-react";
-import { AnimationProject, Scene, Character } from "@/types/animation";
+import { Film, ArrowLeft, Save, Play, Volume2 } from "lucide-react";
+import { AnimationProject } from "@/types/animation";
 
 export default function EditorPage() {
   const params = useParams();
-  const router = useRouter();
+
   const [project, setProject] = useState<AnimationProject | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

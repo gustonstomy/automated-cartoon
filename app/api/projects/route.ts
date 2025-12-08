@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     }
 
     // Parse story into scenes
-    const { scenes, characters } = parseStoryToScenes(story);
+    const { scenes } = parseStoryToScenes(story);
     const totalDuration = calculateTotalDuration(scenes);
 
     // Create project data

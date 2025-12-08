@@ -20,7 +20,6 @@ interface AnimationCompositionProps {
 
 export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
   scenes,
-  metadata,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -58,7 +57,7 @@ export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
       />
 
       {/* Characters */}
-      {currentScene.characters.map((character, idx) => {
+      {currentScene.characters.map((character) => {
         // Check for animations
         const characterAnimations = currentScene.animations.filter(
           (anim) => anim.targetId === character.id
@@ -120,6 +119,15 @@ export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
           expression = "talking";
         }
 
+        // Get the appropriate sprite based on expression
+        // If character has expressions, use them; otherwise use default sprite
+        const spriteToDisplay = character.expressions?.[expression]
+          ? character.sprite.replace(
+              /<\/svg>/,
+              `<path d="${character.expressions[expression]}" fill="currentColor" /></svg>`
+            )
+          : character.sprite;
+
         return (
           <div
             key={character.id}
@@ -133,7 +141,7 @@ export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
               height: "120px",
               color: character.color,
             }}
-            dangerouslySetInnerHTML={{ __html: character.sprite }}
+            dangerouslySetInnerHTML={{ __html: spriteToDisplay }}
           />
         );
       })}
