@@ -19,24 +19,144 @@ export default function PreviewPage() {
 
   const handleExport = async () => {
     if (!project) return;
+
     setExporting(true);
     setExportUrl(null);
+
     try {
-      const response = await fetch("/api/render", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId: project.id }),
-      });
-      const data = await response.json();
-      if (data.success) {
-        setExportUrl(data.url);
-      } else {
-        alert("Export failed: " + (data.error || "Unknown error"));
+      // Get the animation container
+      const animationContainer = document.querySelector(
+        ".animation-player"
+      ) as HTMLElement;
+      if (!animationContainer) {
+        throw new Error("Animation container not found");
       }
+
+      // Create a canvas to record
+      const canvas = document.createElement("canvas");
+      canvas.width = 1920;
+      canvas.height = 1080;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Canvas context not available");
+
+      // Setup MediaRecorder
+      const stream = canvas.captureStream(30); // 30 fps
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: "video/webm;codecs=vp9",
+        videoBitsPerSecond: 5000000, // 5 Mbps
+      });
+
+      const chunks: Blob[] = [];
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunks, { type: "video/webm" });
+        const url = URL.createObjectURL(blob);
+        setExportUrl(url);
+        setExporting(false);
+      };
+
+      // Start recording
+      mediaRecorder.start();
+
+      // Render each frame
+      const fps = project.metadata.fps;
+      const totalFrames = Math.floor(project.metadata.totalDuration * fps);
+
+      for (let frame = 0; frame < totalFrames; frame++) {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Calculate current scene
+        let currentSceneIndex = 0;
+        let sceneStartFrame = 0;
+
+        for (let i = 0; i < project.scenes.length; i++) {
+          const sceneDurationInFrames = Math.floor(
+            project.scenes[i].duration * fps
+          );
+          if (frame < sceneStartFrame + sceneDurationInFrames) {
+            currentSceneIndex = i;
+            break;
+          }
+          sceneStartFrame += sceneDurationInFrames;
+        }
+
+        const currentScene = project.scenes[currentSceneIndex];
+        const sceneFrame = frame - sceneStartFrame;
+
+        // Draw background
+        const bgSvg = new Image();
+        bgSvg.src =
+          "data:image/svg+xml;base64," + btoa(currentScene.background);
+        await new Promise((resolve) => {
+          bgSvg.onload = () => {
+            ctx.drawImage(bgSvg, 0, 0, canvas.width, canvas.height);
+            resolve(null);
+          };
+        });
+
+        // Draw characters
+        for (const char of currentScene.characters) {
+          const characterAnimations = currentScene.animations.filter(
+            (anim) => anim.targetId === char.id
+          );
+
+          let x = char.position.x;
+          let y = char.position.y;
+          let scale = char.scale;
+          let opacity = 1;
+
+          characterAnimations.forEach((anim) => {
+            const animStartFrame = anim.startTime * fps;
+            const animDuration = anim.duration * fps;
+
+            if (
+              sceneFrame >= animStartFrame &&
+              sceneFrame < animStartFrame + animDuration
+            ) {
+              const progress = (sceneFrame - animStartFrame) / animDuration;
+
+              switch (anim.type) {
+                case "move":
+                  x = anim.from.x + (anim.to.x - anim.from.x) * progress;
+                  y = anim.from.y + (anim.to.y - anim.from.y) * progress;
+                  break;
+                case "appear":
+                  opacity = progress;
+                  scale = progress;
+                  break;
+              }
+            }
+          });
+
+          // Draw character sprite
+          const charImg = new Image();
+          charImg.src = "data:image/svg+xml;base64," + btoa(char.sprite);
+          await new Promise((resolve) => {
+            charImg.onload = () => {
+              ctx.save();
+              ctx.globalAlpha = opacity;
+              ctx.translate(x, y);
+              ctx.scale(scale, scale);
+              ctx.drawImage(charImg, -50, -60, 100, 120);
+              ctx.restore();
+              resolve(null);
+            };
+          });
+        }
+
+        // Wait for next frame (1/fps seconds)
+        await new Promise((resolve) => setTimeout(resolve, 1000 / fps));
+      }
+
+      // Stop recording
+      mediaRecorder.stop();
     } catch (error) {
       console.error("Export error:", error);
-      alert("Export failed");
-    } finally {
+      alert("Export failed: " + (error as Error).message);
       setExporting(false);
     }
   };
@@ -163,11 +283,11 @@ export default function PreviewPage() {
             <p className="text-green-800">Video exported successfully!</p>
             <a
               href={exportUrl}
-              download
+              download={`${project?.name || "animation"}.webm`}
               className="flex items-center gap-2 text-green-700 font-medium hover:underline"
             >
               <Download className="w-4 h-4" />
-              Download MP4
+              Download Video (WebM)
             </a>
           </div>
         </div>
@@ -177,7 +297,7 @@ export default function PreviewPage() {
         <Card className="cartoon-shadow">
           <CardContent className="p-6">
             {/* Player */}
-            <div className="aspect-video bg-black rounded-lg overflow-hidden relative mb-4">
+            <div className="aspect-video bg-black rounded-lg overflow-hidden relative mb-4 animation-player">
               {currentScene && (
                 <>
                   {/* Background */}
