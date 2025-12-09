@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { parseStoryToScenes, calculateTotalDuration } from "@/lib/story-parser";
 import { AnimationProject } from "@/types/animation";
+import { generateAudioUrl } from "@/lib/tts";
 
 export async function GET() {
   try {
@@ -35,6 +36,16 @@ export async function POST(request: Request) {
 
     // Parse story into scenes
     const { scenes } = parseStoryToScenes(story);
+
+    // Generate audio for dialogue
+    for (const scene of scenes) {
+      for (const dialogue of scene.dialogue) {
+        if (dialogue.text) {
+          dialogue.audioUrl = generateAudioUrl(dialogue.text);
+        }
+      }
+    }
+
     const totalDuration = calculateTotalDuration(scenes);
 
     // Create project data

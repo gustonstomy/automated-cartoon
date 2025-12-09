@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Film, ArrowLeft, Save, Play, Volume2 } from "lucide-react";
+import { ArrowLeft, Save, Play, Volume2 } from "lucide-react";
 import { AnimationProject } from "@/types/animation";
 
 export default function EditorPage() {
@@ -85,7 +85,7 @@ export default function EditorPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center">
-        <div className="text-2xl font-bold text-purple-600">Loading...</div>
+        <div className="text-2xl font-bold text-black">Loading...</div>
       </div>
     );
   }
@@ -118,7 +118,7 @@ export default function EditorPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </Link>
-            <Film className="w-8 h-8 text-primary" />
+
             <span className="text-xl font-bold text-gray-800">
               {project.name}
             </span>
@@ -133,7 +133,7 @@ export default function EditorPage() {
             <Button
               onClick={saveProject}
               disabled={saving}
-              className="cartoon-button bg-black text-white"
+              className="cartoon-button hover:bg-black hover:text-white bg-black text-white"
             >
               <Save className="w-4 h-4" />
               {saving ? "Saving..." : "Save"}

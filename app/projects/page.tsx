@@ -58,13 +58,12 @@ export default function ProjectsPage() {
       <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Film className="w-8 h-8 text-primary" />
             <span className="text-2xl font-bold  text-black ">
               CartoonMaker
             </span>
           </Link>
           <Link href="/create">
-            <Button className="cartoon-button cartoon-shadow bg-black text-white">
+            <Button className="cartoon-button hover:bg-black hover:text-white bg-black text-white">
               <Plus className="w-4 h-4" />
               New Project
             </Button>
@@ -103,7 +102,7 @@ export default function ProjectsPage() {
                 Create your first animation to get started!
               </p>
               <Link href="/create">
-                <Button className="cartoon-button cartoon-shadow bg-black text-white">
+                <Button className="cartoon-button  hover:bg-black hover:text-white bg-black text-white">
                   <Plus className="w-4 h-4" />
                   Create Project
                 </Button>
@@ -128,7 +127,7 @@ export default function ProjectsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 rounded-lg h-32 mb-4 flex items-center justify-center">
-                    <Film className="w-16 h-16 text-purple-400" />
+                    <Film className="w-16 h-16 text-black" />
                   </div>
                   <div className="flex gap-2">
                     <Link href={`/editor/${project.id}`} className="flex-1">

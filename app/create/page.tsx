@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Film, ArrowLeft, Wand2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { getAllCharacterTemplates } from "@/lib/templates/characters";
 import { getAllSceneTemplates } from "@/lib/templates/scenes";
 
@@ -75,7 +75,6 @@ export default function CreatePage() {
       <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Film className="w-8 h-8 text-primary" />
             <span className="text-2xl font-bold text-black">CartoonMaker</span>
           </Link>
           <Link href="/">
@@ -143,17 +142,10 @@ export default function CreatePage() {
                   </Button>
                   <Button
                     onClick={handleGenerate}
-                    className="flex-1 cartoon-button cartoon-shadow bg-black text-white"
+                    className="flex-1 cartoon-button hover:bg-black hover:text-white bg-black text-white"
                     disabled={loading}
                   >
-                    {loading ? (
-                      <>Generating...</>
-                    ) : (
-                      <>
-                        <Wand2 className="w-4 h-4" />
-                        Generate Animation
-                      </>
-                    )}
+                    {loading ? <>Generating...</> : <>Generate Animation</>}
                   </Button>
                 </div>
               </CardContent>

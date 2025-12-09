@@ -5,6 +5,8 @@ import {
   useVideoConfig,
   interpolate,
   spring,
+  Audio,
+  Easing,
 } from "remotion";
 import { Scene as SceneType } from "@/types/animation";
 
@@ -70,6 +72,7 @@ export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
         let expression = "neutral";
 
         // Apply animations
+        // Apply animations
         characterAnimations.forEach((anim) => {
           const animStartFrame = anim.startTime * fps;
           const animDuration = anim.duration * fps;
@@ -79,21 +82,39 @@ export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
             sceneFrame < animStartFrame + animDuration
           ) {
             const progress = (sceneFrame - animStartFrame) / animDuration;
+            const easedProgress = interpolate(progress, [0, 1], [0, 1], {
+              easing:
+                anim.easing === "easeOut"
+                  ? Easing.out(Easing.ease)
+                  : Easing.inOut(Easing.ease),
+            });
 
             switch (anim.type) {
               case "move":
-                x = interpolate(progress, [0, 1], [anim.from.x, anim.to.x]);
-                y = interpolate(progress, [0, 1], [anim.from.y, anim.to.y]);
+                x = interpolate(
+                  easedProgress,
+                  [0, 1],
+                  [anim.from.x, anim.to.x]
+                );
+                y = interpolate(
+                  easedProgress,
+                  [0, 1],
+                  [anim.from.y, anim.to.y]
+                );
                 break;
               case "scale":
                 scale = interpolate(
-                  progress,
+                  easedProgress,
                   [0, 1],
                   [anim.from.scale || 1, anim.to.scale || 1]
                 );
                 break;
+              case "rotate":
+                // Rotation logic would go here if we had a rotation property on the div
+                // For now, we can use a transform style in the render
+                break;
               case "appear":
-                opacity = interpolate(progress, [0, 1], [0, 1]);
+                opacity = interpolate(easedProgress, [0, 1], [0, 1]);
                 scale = spring({
                   frame: sceneFrame - animStartFrame,
                   fps,
@@ -117,6 +138,9 @@ export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
 
         if (activeDialogue) {
           expression = "talking";
+          // Add a subtle bounce when talking
+          const talkBounce = Math.sin(sceneFrame * 0.5) * 0.05;
+          scale += talkBounce;
         }
 
         // Get the appropriate sprite based on expression
@@ -146,7 +170,7 @@ export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
         );
       })}
 
-      {/* Dialogue Subtitles */}
+      {/* Dialogue Subtitles and Audio */}
       {currentScene.dialogue.map((dialogue) => {
         const dialogueStartFrame = dialogue.startTime * fps;
         const dialogueDuration = dialogue.duration * fps;
@@ -160,17 +184,17 @@ export const AnimationComposition: React.FC<AnimationCompositionProps> = ({
           );
 
           return (
-            <div
-              key={dialogue.characterId + dialogue.startTime}
-              className="absolute bottom-20 left-0 right-0 flex justify-center"
-            >
-              <div className="bg-white/90 backdrop-blur-sm px-8 py-4 rounded-full shadow-lg border-4 border-purple-300 max-w-3xl">
-                <p className="text-2xl font-bold text-center text-gray-800">
-                  <span className="text-primary">{character?.name}:</span>{" "}
-                  {dialogue.text}
-                </p>
+            <React.Fragment key={dialogue.characterId + dialogue.startTime}>
+              {dialogue.audioUrl && <Audio src={dialogue.audioUrl} />}
+              <div className="absolute bottom-20 left-0 right-0 flex justify-center">
+                <div className="bg-white/90 backdrop-blur-sm px-8 py-4 rounded-full shadow-lg border-4 border-purple-300 max-w-3xl">
+                  <p className="text-2xl font-bold text-center text-gray-800">
+                    <span className="text-primary">{character?.name}:</span>{" "}
+                    {dialogue.text}
+                  </p>
+                </div>
               </div>
-            </div>
+            </React.Fragment>
           );
         }
         return null;

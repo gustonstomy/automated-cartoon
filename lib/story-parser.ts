@@ -73,17 +73,33 @@ export function parseStoryToScenes(storyText: string): ParsedStory {
         duration: 0.5,
         easing: "easeOut",
       },
-      // Slight movement when talking
+      // Movement when talking or just idle movement
       {
         targetId: char.id,
         type: "move" as const,
         from: { x: char.position.x, y: char.position.y },
         to: {
-          x: char.position.x + (idx % 2 === 0 ? 10 : -10),
+          x: char.position.x + (idx % 2 === 0 ? 20 : -20),
           y: char.position.y,
         },
         startTime: idx * 3 + 1,
-        duration: 0.5,
+        duration: 1,
+        easing: "easeInOut",
+      },
+      // Return to original position
+      {
+        targetId: char.id,
+        type: "move" as const,
+        from: {
+          x: char.position.x + (idx % 2 === 0 ? 20 : -20),
+          y: char.position.y,
+        },
+        to: {
+          x: char.position.x,
+          y: char.position.y,
+        },
+        startTime: idx * 3 + 2.5,
+        duration: 1,
         easing: "easeInOut",
       },
     ]);
@@ -131,8 +147,7 @@ export function calculateTotalDuration(scenes: Scene[]): number {
  */
 export function generateCharacterTimeline(
   character: Character,
-  dialogue: DialogueLine[],
-  sceneDuration: number
+  dialogue: DialogueLine[]
 ): Animation[] {
   const animations: Animation[] = [];
 
